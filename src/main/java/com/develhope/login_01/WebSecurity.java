@@ -31,7 +31,6 @@ public class WebSecurity {
         http.csrf().disable();
         http.headers().frameOptions().disable();
 
-        // Add JWT token filter
         http.addFilterBefore(
                 jwtTokenFilter,
                 UsernamePasswordAuthenticationFilter.class
