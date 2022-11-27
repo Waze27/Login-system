@@ -2,6 +2,7 @@ package com.develhope.login_01.entities;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -20,7 +21,16 @@ public class User {
     private String passwordResetCode;
     private LocalDateTime jwtCreatedOn;
 
-    public User(Long id, String name, String surname, String email, String password, String activationCode, String passwordResetCode, LocalDateTime jwtCreatedOn) {
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "USER_ROLES",
+            joinColumns = {
+                    @JoinColumn(name = "USER_ID")
+            },
+            inverseJoinColumns = {
+                    @JoinColumn(name = "ROLE_ID") })
+    private Set<Role> roles;
+
+    public User(Long id, String name, String surname, String email, String password, String activationCode, String passwordResetCode, LocalDateTime jwtCreatedOn, Set<Role> roles) {
         this.id = id;
         this.name = name;
         this.surname = surname;
@@ -29,6 +39,7 @@ public class User {
         this.activationCode = activationCode;
         this.passwordResetCode = passwordResetCode;
         this.jwtCreatedOn = jwtCreatedOn;
+        this.roles = roles;
     }
 
     public User() {
@@ -104,5 +115,11 @@ public class User {
 
     public void setJwtCreatedOn(LocalDateTime jwtCreatedOn) {
         this.jwtCreatedOn = jwtCreatedOn;
+    }
+        public Set<Role> getRoles() {
+        return roles;
+    }
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }
